@@ -17,7 +17,7 @@ class NewsFactory extends Factory
      */
     public function definition(): array
     {
-        $category = Category::factory()->create();
+        $category = Category::all()->random()->id;
         return [
             'titre' => $this->faker->sentence,
             'content' => $this->faker->paragraph,

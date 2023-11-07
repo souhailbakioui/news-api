@@ -20,19 +20,8 @@ use Illuminate\Support\Facades\Route;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::middleware(['auth:sanctum'])->group(function () {
-    // Define your protected API routes here
-
-    // Route::get('/user', function (Request $request) {
-    //     return $request->user();
-    // });
-    // dd(NewsController::class);
-    Route::apiResource('news', NewsController::class);
-    Route::apiResource('category', CategoryController::class);
     Route::get('news/latest', [NewsController::class, 'getLatestNews']);
     Route::get('news/category/{category}', [NewsController::class, 'getNewsByCategory']);
-    // Add more protected routes here
-    // For example:
-    // Route::get('/profile', 'ProfileController@index');
-    // Route::post('/posts', 'PostController@store');
-    // ...
+    Route::apiResource('news', NewsController::class);
+    Route::apiResource('category', CategoryController::class);
 });

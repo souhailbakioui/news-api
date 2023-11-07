@@ -19,8 +19,8 @@ class CategoryResource extends JsonResource
             'name' => $this?->name,
             "parent_id"=>$this?->parent_id,
             'parent_category' => $this->when($this->parent_id, new CategoryResource($this->parent)),
-            'created_at' => $this?->created_at,
-            'updated_at' => $this?->updated_at,
+            // 'created_at' => $this?->created_at,
+            // 'updated_at' => $this?->updated_at,
         ];;
     }
 }

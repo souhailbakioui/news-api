@@ -26,7 +26,7 @@ class NewsController extends Controller
             $news = $this->newsService->getAllNews();
             return NewsResource::collection($news);
         } catch (Exception $e) {
-            return new JsonResponse(['error' => 'An error occurred.',"message"=>$e->getMessage()], 500);
+            return new JsonResponse(['error' => 'An error occurred.', "message" => $e->getMessage()], 500);
         }
     }
 
@@ -37,17 +37,23 @@ class NewsController extends Controller
             $news = $this->newsService->createNews($data);
             return new NewsResource($news);
         } catch (Exception $e) {
-            return new JsonResponse(['error' => 'An error occurred.',"message"=>$e->getMessage()], 500);
+            return new JsonResponse(['error' => 'An error occurred.', "message" => $e->getMessage()], 500);
         }
     }
 
     public function show($id)
     {
         try {
+
             $news = $this->newsService->getNewsById($id);
-            return new NewsResource($news);
+
+            if (!$news) {
+                return response()->json(['message' => 'News not found'], 404);
+            }
+            $news = $this->newsService->getNewsById($id);
+            return response()->json(['data' => new NewsResource($news), 'message' => "News article added successfully."]);
         } catch (Exception $e) {
-            return new JsonResponse(['error' => 'An error occurred.',"message"=>$e->getMessage()], 500);
+            return new JsonResponse(['error' => 'An error occurred.', "message" => $e->getMessage()], 500);
         }
     }
 
@@ -56,15 +62,15 @@ class NewsController extends Controller
         try {
             $data = $request->validated();
             $news = $this->newsService->getNewsById($id);
-            
+
             if (!$news) {
                 return response()->json(['message' => 'News not found'], 404);
             }
 
             $news = $this->newsService->updateNews($news, $data);
-            return new NewsResource($news);
+            return response()->json(['data' => new NewsResource($news), 'message' => "News article updated successfully."]);
         } catch (Exception $e) {
-            return new JsonResponse(['error' => 'An error occurred.',"message"=>$e->getMessage()], 500);
+            return new JsonResponse(['error' => 'An error occurred.', "message" => $e->getMessage()], 500);
         }
     }
 
@@ -78,9 +84,9 @@ class NewsController extends Controller
             }
 
             $this->newsService->deleteNews($news);
-            return response()->json(['message' => 'News deleted'], 204);
+            return response()->json(null, 204);
         } catch (Exception $e) {
-            return new JsonResponse(['error' => 'An error occurred.',"message"=>$e->getMessage()], 500);
+            return new JsonResponse(['error' => 'An error occurred.', "message" => $e->getMessage()], 500);
         }
     }
 
@@ -88,9 +94,10 @@ class NewsController extends Controller
     {
         try {
             $news = News::latest('date_debut')->where('date_expiration', '>', now())->get();
-            return NewsResource::collection($news);
+
+            return response()->json(['data' =>  NewsResource::collection($news)]);
         } catch (Exception $e) {
-            return new JsonResponse(['error' => 'An error occurred.',"message"=>$e->getMessage()], 500);
+            return new JsonResponse(['error' => 'An error occurred.', "message" => $e->getMessage()], 500);
         }
     }
 
@@ -102,7 +109,7 @@ class NewsController extends Controller
             })->where('date_expiration', '>', now())->get();
             return NewsResource::collection($news);
         } catch (Exception $e) {
-            return new JsonResponse(['error' => 'An error occurred.',"message"=>$e->getMessage()], 500);
+            return new JsonResponse(['error' => 'An error occurred.', "message" => $e->getMessage()], 500);
         }
     }
 }

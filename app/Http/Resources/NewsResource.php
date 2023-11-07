@@ -15,14 +15,14 @@ class NewsResource extends JsonResource
     public function toArray(Request $request): array
     {
         return  [
-            'id' => $this->id,
+            'id' => $this->id ?? "",
             'titre' => $this->titre,
             'content' => $this->content,
-            'category' => $this->category->name,
+            'category' => new CategoryResource($this->category),
             'date_debut' => $this->date_debut,
             'date_expiration' => $this->date_expiration,
             'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            // 'updated_at' => $this->updated_at,
         ];;
     }
 }

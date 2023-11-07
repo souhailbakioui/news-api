@@ -16,7 +16,10 @@ return new class extends Migration
             $table->string('titre');
             $table->text('content');
             $table->unsignedBigInteger('category_id');
-            $table->foreign('category_id')->references('id')->on('categories');
+            $table->foreign('category_id')
+                ->references('id')
+                ->on('categories')
+                ->onDelete('cascade');
             $table->date('date_debut');
             $table->date('date_expiration');
             $table->timestamps();
